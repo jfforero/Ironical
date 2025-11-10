@@ -57,14 +57,13 @@
 
 <body>
   <div id="container">
-    <h2>Audio Evaluation</h2>
+    <h2>Prosodic Irony Evaluation</h2>
     <p id="progress"></p>
     <div id="fileInfo" class="file-info"></div>
     <audio id="audioPlayer" controls></audio>
 
     <!-- Embedded Google Form -->
     <iframe id="formFrame"></iframe>
-    <p>Please SUBMIT your answers before proceeding to the next audio file.</p>
 
     ✅ <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
 
@@ -104,7 +103,7 @@
     ];
 
     // Filter out missing files
-    audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
+    //audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
 
     // Randomize file order
     audioFiles.sort(() => Math.random() - 0.5);
@@ -151,4 +150,5 @@
   </script>
 </body>
 </html>
+
 
