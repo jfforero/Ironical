@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audio Evaluation - Debug Version</title>
+  <title>Audio Evaluation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,43 +45,21 @@
     button:hover {
       background: #1e40af;
     }
-    button:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-    .error {
-      color: #dc2626;
-      background: #fef2f2;
-      padding: 1em;
-      border-radius: 8px;
-      margin: 1em 0;
-    }
-    .success {
-      color: #059669;
-      background: #f0fdf4;
-      padding: 1em;
-      border-radius: 8px;
-      margin: 1em 0;
-    }
-    #fileList {
-      text-align: left;
+    .file-info {
       background: #f8fafc;
-      padding: 1em;
-      border-radius: 8px;
-      margin: 1em 0;
-      max-height: 200px;
-      overflow-y: auto;
+      padding: 0.5em;
+      border-radius: 6px;
+      margin: 0.5em 0;
+      font-size: 0.9em;
     }
   </style>
 </head>
 
 <body>
   <div id="container">
-    <h2>Audio Evaluation - File Check</h2>
-    <div id="status"></div>
-    <div id="fileList"></div>
+    <h2>Audio Evaluation</h2>
     <p id="progress"></p>
-    <div id="errorMessage" class="error" style="display: none;"></div>
+    <div id="fileInfo" class="file-info"></div>
     <audio id="audioPlayer" controls></audio>
 
     <!-- Embedded Google Form -->
@@ -90,8 +68,7 @@
 
     ✅ <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
 
-    <button id="nextBtn" disabled>Next Sample</button>
-    <button id="startBtn" style="background: #059669;">Start Evaluation</button>
+    <button id="nextBtn">Next Sample</button>
   </div>
 
   <script>
@@ -110,134 +87,55 @@
      * PAGE FUNCTIONALITY *
      **********************/
 
+    // Build list of all audio file paths - ONLY USE WORKING PATHS
     let audioFiles = [];
-    let availableAudioFiles = [];
+    tags.forEach(tag => {
+      for (let i = 1; i <= numFiles; i++) {
+        const idx = String(i).padStart(3, '0');
+        // Only use the paths that were confirmed to work
+        audioFiles.push(`audio/${tag}${idx}.wav`);
+      }
+    });
+
+    // Remove missing files based on your debug results
+    const missingFiles = [
+      'audio/S14N_011.wav',
+      'audio/S14N_013.wav'
+    ];
+
+    // Filter out missing files
+    audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
+
+    // Randomize file order
+    audioFiles.sort(() => Math.random() - 0.5);
+
     let currentIndex = 0;
 
     const player = document.getElementById('audioPlayer');
     const progress = document.getElementById('progress');
     const formFrame = document.getElementById('formFrame');
     const nextBtn = document.getElementById('nextBtn');
-    const startBtn = document.getElementById('startBtn');
-    const errorMessage = document.getElementById('errorMessage');
-    const statusDiv = document.getElementById('status');
-    const fileListDiv = document.getElementById('fileList');
-
-    // Generate all possible file paths
-    function generateAudioFiles() {
-      audioFiles = [];
-      tags.forEach(tag => {
-        for (let i = 1; i <= numFiles; i++) {
-          const idx = String(i).padStart(3, '0');
-          
-          // Try multiple possible path formats
-          const possiblePaths = [
-            `audio/${tag}${idx}.wav`,
-            `/${tag}${idx}.wav`,
-            `./audio/${tag}${idx}.wav`,
-            `${tag}${idx}.wav`,
-            `https://jfforero.github.io/audio/${tag}${idx}.wav`
-          ];
-          
-          // Add all possibilities
-          possiblePaths.forEach(path => {
-            audioFiles.push(path);
-          });
-        }
-      });
-      
-      // Remove duplicates
-      audioFiles = [...new Set(audioFiles)];
-      return audioFiles;
-    }
-
-    // Function to check if audio file exists
-    async function checkAudioFileExists(url) {
-      try {
-        const response = await fetch(url, { method: 'HEAD' });
-        return response.ok;
-      } catch (error) {
-        return false;
-      }
-    }
-
-    // Check all files and display results
-    async function checkAllFiles() {
-      statusDiv.innerHTML = '<p>🔍 Checking audio files... This may take a moment.</p>';
-      fileListDiv.innerHTML = '';
-      
-      availableAudioFiles = [];
-      const foundFiles = [];
-      const missingFiles = [];
-      
-      // Generate files first
-      generateAudioFiles();
-      
-      // Check each file
-      for (let i = 0; i < audioFiles.length; i++) {
-        const file = audioFiles[i];
-        const exists = await checkAudioFileExists(file);
-        
-        if (exists) {
-          availableAudioFiles.push(file);
-          foundFiles.push(file);
-          fileListDiv.innerHTML += `<div style="color: green;">✅ ${file}</div>`;
-        } else {
-          missingFiles.push(file);
-          fileListDiv.innerHTML += `<div style="color: red;">❌ ${file}</div>`;
-        }
-        
-        // Update status
-        statusDiv.innerHTML = `<p>🔍 Checking files... (${i + 1}/${audioFiles.length}) - Found: ${foundFiles.length}</p>`;
-        
-        // Small delay to avoid overwhelming requests
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      
-      // Final status
-      if (availableAudioFiles.length > 0) {
-        statusDiv.innerHTML = `<div class="success">
-          <h3>✅ Ready to Start!</h3>
-          <p>Found ${availableAudioFiles.length} audio files.</p>
-          <p>Click "Start Evaluation" to begin.</p>
-        </div>`;
-        startBtn.disabled = false;
-        nextBtn.disabled = false;
-      } else {
-        statusDiv.innerHTML = `<div class="error">
-          <h3>❌ No Audio Files Found</h3>
-          <p>No audio files were found at the expected locations.</p>
-          <p>Please check that your audio files are uploaded to your GitHub repository.</p>
-          <p><strong>Expected location:</strong> <code>https://jfforero.github.io/audio/</code></p>
-        </div>`;
-        startBtn.disabled = true;
-        nextBtn.disabled = true;
-      }
-      
-      // Randomize the order of available files
-      availableAudioFiles.sort(() => Math.random() - 0.5);
-    }
+    const fileInfo = document.getElementById('fileInfo');
 
     function loadAudio() {
-      if (currentIndex >= availableAudioFiles.length) {
+      if (currentIndex >= audioFiles.length) {
         document.getElementById('container').innerHTML = `
           <h2>All samples evaluated ✅</h2>
           <p>Thank you for your participation!</p>
-          <p>You evaluated ${availableAudioFiles.length} audio samples.</p>`;
+          <p>You evaluated ${audioFiles.length} audio samples.</p>`;
         return;
       }
 
-      const file = availableAudioFiles[currentIndex];
+      const file = audioFiles[currentIndex];
       player.src = file;
       player.load();
-      progress.textContent = `Sample ${currentIndex + 1} of ${availableAudioFiles.length} - ${file}`;
+      progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
+      fileInfo.textContent = `Current file: ${file}`;
 
       // Prefill hidden field with encoded filename
       const encodedFile = encodeURIComponent(file);
       const formURL = `${formBaseURL}&${sampleFieldID}=${encodedFile}`;
       formFrame.src = formURL;
-      
-      console.log(`Loading: ${file}`);
     }
 
     nextBtn.addEventListener('click', () => {
@@ -245,16 +143,11 @@
       loadAudio();
     });
 
-    startBtn.addEventListener('click', () => {
-      statusDiv.style.display = 'none';
-      fileListDiv.style.display = 'none';
-      startBtn.style.display = 'none';
-      nextBtn.disabled = false;
-      loadAudio();
-    });
+    // Show initial file count
+    fileInfo.textContent = `Total files available: ${audioFiles.length}`;
 
-    // Initialize - check files on page load
-    checkAllFiles();
+    // Initial load
+    loadAudio();
   </script>
 </body>
 </html>
