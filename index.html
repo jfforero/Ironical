@@ -99,8 +99,8 @@
 
     // Remove missing files based on your debug results
     const missingFiles = [
-      'audio/S14N_011.wav',
-      'audio/S14N_013.wav'
+     // 'audio/S14N_011.wav',
+     // 'audio/S14N_013.wav'
     ];
 
     // Filter out missing files
@@ -130,7 +130,7 @@
       player.src = file;
       player.load();
       progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
-      fileInfo.textContent = `Current file: ${file}`;
+     // fileInfo.textContent = `Current file: ${file}`;
 
       // Prefill hidden field with encoded filename
       const encodedFile = encodeURIComponent(file);
@@ -151,3 +151,4 @@
   </script>
 </body>
 </html>
+
