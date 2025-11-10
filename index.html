@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Evaluation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      padding: 2em;
+    }
+    #container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 2em;
+      text-align: center;
+    }
+    audio {
+      width: 100%;
+      margin: 1.5em 0;
+    }
+    iframe {
+      width: 100%;
+      height: 1600px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <h2>Prosodic Irony Evaluation</h2>
+    <p id="progress"></p>
+    <audio id="audioPlayer" controls></audio>
+
+    <!-- Embedded Google Form -->
+    <iframe id="formFrame"></iframe>
+
+    <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+    <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
+        ✅ <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
+    </p>
+</div>
+    <button id="nextBtn">Next Sample</button>
+  </div>
+
+  <script>
+    /**********************
+     * CONFIGURATION AREA *
+     **********************/
+
+    // Define audio folders and number of files per folder
+    const folders = ['K1_', 'S4_', 'S14N_', 'S1H4_'];
+    const numFiles = 13; // adjust to your number of samples per folder
+
+
+  const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSflygks3jJjGm4_J-CJVH1dqJpzMLb10rd8QpfsH63mWeaLNA/viewform?embedded=true&usp=pp_url";
+  const sampleFieldID = "entry.1636001789"; // replace with your actual entry ID
+
+
+
+    /**********************
+     * PAGE FUNCTIONALITY *
+     **********************/
+
+    // Build list of all audio file paths
+    let audioFiles = [];
+    folders.forEach(folder => {
+      for (let i = 1; i <= numFiles; i++) {
+        const idx = String(i).padStart(3, '0');
+        audioFiles.push(`/audio/${folder}${idx}.wav`);
+        //audioFiles.push(`/audio/ALL/${folder}/${folder}${idx}.wav`);
+      }
+    });
+
+    // Randomize file order
+    audioFiles.sort(() => Math.random() - 0.5);
+
+    let currentIndex = 0;
+
+    const player = document.getElementById('audioPlayer');
+    const progress = document.getElementById('progress');
+    const formFrame = document.getElementById('formFrame');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function loadAudio() {
+      if (currentIndex >= audioFiles.length) {
+        document.getElementById('container').innerHTML = `
+          <h2>All samples evaluated ✅</h2>
+          <p>Thank you for your participation!</p>`;
+        return;
+      }
+
+      const file = audioFiles[currentIndex];
+      player.src = file;
+      player.load();
+      progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
+
+      // Prefill hidden field with encoded filename
+      const encodedFile = encodeURIComponent(file);
+      const formURL = `${formBaseURL}&${sampleFieldID}=${encodedFile}`;
+      formFrame.src = formURL;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      loadAudio();
+    });
+
+    // Initial load
+    loadAudio();
+  </script>
+</body>
+</html>
