@@ -1,156 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prosodic Irony Evaluation</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      padding: 2em;
-    }
-    #container {
-      width: 100%;
-      max-width: 800px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 2em;
-      text-align: center;
-    }
-    audio {
-      width: 100%;
-      margin: 1.5em 0;
-    }
-    iframe {
-      width: 100%;
-      height: 1600px;
-      border: none;
-      border-radius: 8px;
-    }
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75em 1.5em;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 1em;
-    }
-    button:hover {
-      background: #1e40af;
-    }
-    .file-info {
-      background: #f8fafc;
-      padding: 0.5em;
-      border-radius: 6px;
-      margin: 0.5em 0;
-      font-size: 0.9em;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prosodic Irony Evaluation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      padding: 2em;
+    }
+    #container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 2em;
+      text-align: center;
+    }
+    audio {
+      width: 100%;
+      margin: 1.5em 0;
+    }
+    iframe {
+      width: 100%;
+      height: 1600px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    .file-info {
+      background: #f8fafc;
+      padding: 0.5em;
+      border-radius: 6px;
+      margin: 0.5em 0;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 
 <body>
-  <div id="container">
-    <h2>Prosodic Irony Evaluation</h2>
-    <p id="progress"></p>
+  <div id="container">
+    <h2>Prosodic Irony Evaluation</h2>
+    <p id="progress"></p>
 
-    <audio id="audioPlayer" controls></audio>
+    <audio id="audioPlayer" controls></audio>
 
-    <!-- Embedded Google Form -->
-    <iframe id="formFrame"></iframe>
+    <!-- Embedded Google Form -->
+    <iframe id="formFrame"></iframe>
 
-    <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
-    <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
-        <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
-    </p>
+    <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+    <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
+        ✅ <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
+    </p>
 </div>
 
-    <button id="nextBtn">Next Sample</button>
-  </div>
+    <button id="nextBtn">Next Sample</button>
+  </div>
 
-  <script>
-    /**********************
-     * CONFIGURATION AREA *
-     **********************/
+  <script>
+    /**********************
+     * CONFIGURATION AREA *
+     **********************/
 
-    // Define audio tags and number of files per tag
-    const tags = ['K1_', 'S4_', 'S14N_', 'S1H4_'];
-    const numFiles = 6;
+    // Define audio tags and number of files per tag
+    const tags = ['K1_', 'S4_', 'S14N_', 'S1H4_'];
+    const numFiles = 6;
 
-    const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSflygks3jJjGm4_J-CJVH1dqJpzMLb10rd8QpfsH63mWeaLNA/viewform?embedded=true&usp=pp_url";
-    const sampleFieldID = "entry.1636001789";
+    const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSflygks3jJjGm4_J-CJVH1dqJpzMLb10rd8QpfsH63mWeaLNA/viewform?embedded=true&usp=pp_url";
+    const sampleFieldID = "entry.1636001789";
 
-    /**********************
-     * PAGE FUNCTIONALITY *
-     **********************/
+    /**********************
+     * PAGE FUNCTIONALITY *
+     **********************/
 
-    // Build list of all audio file paths - ONLY USE WORKING PATHS
-    let audioFiles = [];
-    tags.forEach(tag => {
-      for (let i = 1; i <= numFiles; i++) {
-        const idx = String(i).padStart(3, '0');
-        // Only use the paths that were confirmed to work
-        audioFiles.push(`audio/${tag}${idx}.wav`);
-      }
-    });
+    // Build list of all audio file paths - ONLY USE WORKING PATHS
+    let audioFiles = [];
+    tags.forEach(tag => {
+      for (let i = 1; i <= numFiles; i++) {
+        const idx = String(i).padStart(3, '0');
+        // Only use the paths that were confirmed to work
+        audioFiles.push(`audio/${tag}${idx}.wav`);
+      }
+    });
 
-    // Remove missing files based on your debug results
-    const missingFiles = [
-     // 'audio/S14N_011.wav',
-     // 'audio/S14N_013.wav'
-    ];
+    // Remove missing files based on your debug results
+    const missingFiles = [
+     // 'audio/S14N_011.wav',
+     // 'audio/S14N_013.wav'
+    ];
 
-    // Filter out missing files
-    //audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
+    // Filter out missing files
+    //audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
 
-    // Randomize file order
-    audioFiles.sort(() => Math.random() - 0.5);
+    // Randomize file order
+    audioFiles.sort(() => Math.random() - 0.5);
 
-    let currentIndex = 0;
+    let currentIndex = 0;
 
-    const player = document.getElementById('audioPlayer');
-    const progress = document.getElementById('progress');
-    const formFrame = document.getElementById('formFrame');
-    const nextBtn = document.getElementById('nextBtn');
-    const fileInfo = document.getElementById('fileInfo');
+    const player = document.getElementById('audioPlayer');
+    const progress = document.getElementById('progress');
+    const formFrame = document.getElementById('formFrame');
+    const nextBtn = document.getElementById('nextBtn');
+    const fileInfo = document.getElementById('fileInfo');
 
-    function loadAudio() {
-      if (currentIndex >= audioFiles.length) {
-        document.getElementById('container').innerHTML = `
-          <h2>All samples evaluated </h2>
-          <p>Thank you for your participation!</p>
-          <p>You evaluated ${audioFiles.length} audio samples.</p>`;
-        return;
-      }
+    function loadAudio() {
+      if (currentIndex >= audioFiles.length) {
+        document.getElementById('container').innerHTML = `
+          <h2>All samples evaluated ✅</h2>
+          <p>Thank you for your participation!</p>
+          <p>You evaluated ${audioFiles.length} audio samples.</p>`;
+        return;
+      }
 
-      const file = audioFiles[currentIndex];
-      player.src = file;
-      player.load();
-      progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
-     // fileInfo.textContent = `Current file: ${file}`;
+      const file = audioFiles[currentIndex];
+      player.src = file;
+      player.load();
+      progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
+     // fileInfo.textContent = `Current file: ${file}`;
 
-      // Prefill hidden field with encoded filename
-      const encodedFile = encodeURIComponent(file);
-      const formURL = `${formBaseURL}&${sampleFieldID}=${encodedFile}`;
-      formFrame.src = formURL;
-    }
+      // Prefill hidden field with encoded filename
+      const encodedFile = encodeURIComponent(file);
+      const formURL = `${formBaseURL}&${sampleFieldID}=${encodedFile}`;
+      formFrame.src = formURL;
+    }
 
-    nextBtn.addEventListener('click', () => {
-      currentIndex++;
-      loadAudio();
-    });
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      loadAudio();
+    });
 
-    // Show initial file count
-    //fileInfo.textContent = `Total files available: ${audioFiles.length}`;
+    // Show initial file count
+    //fileInfo.textContent = `Total files available: ${audioFiles.length}`;
 
-    // Initial load
-    loadAudio();
-  </script>
+    // Initial load
+    loadAudio();
+  </script>
 </body>
 </html>
