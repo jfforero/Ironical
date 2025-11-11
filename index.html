@@ -1,255 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prosodic Irony Evaluation</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      padding: 2em;
-    }
-    #container {
-      width: 100%;
-      max-width: 800px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 2em;
-      text-align: center;
-    }
-    audio {
-      width: 100%;
-      margin: 1.5em 0;
-    }
-    iframe {
-      width: 100%;
-      height: 1600px;
-      border: none;
-      border-radius: 8px;
-    }
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75em 1.5em;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 1em;
-    }
-    button:hover {
-      background: #1e40af;
-    }
-    .file-info {
-      background: #f8fafc;
-      padding: 0.5em;
-      border-radius: 6px;
-      margin: 0.5em 0;
-      font-size: 0.9em;
-    }
-    .personal-info {
-      background: #e8f4fd;
-      padding: 1em;
-      border-radius: 8px;
-      margin: 1em 0;
-      text-align: left;
-    }
-    .personal-info h3 {
-      margin-top: 0;
-      color: #1e40af;
-    }
-    .personal-info label {
-      display: block;
-      margin: 0.5em 0 0.2em;
-    }
-    .personal-info input, .personal-info select {
-      width: 100%;
-      padding: 0.5em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    .form-section {
-      margin-bottom: 1.5em;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prosodic Irony Evaluation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      padding: 2em;
+    }
+    #container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 2em;
+      text-align: center;
+    }
+    audio {
+      width: 100%;
+      margin: 1.5em 0;
+    }
+    iframe {
+      width: 100%;
+      height: 1600px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    .file-info {
+      background: #f8fafc;
+      padding: 0.5em;
+      border-radius: 6px;
+      margin: 0.5em 0;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 
 <body>
-  <div id="container">
-    <h2>Prosodic Irony Evaluation</h2>
-    
-    <!-- Personal Information Form -->
-    <div class="personal-info">
-      <h3>Personal Information</h3>
-      <div class="form-section">
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter your name">
-      </div>
-      <div class="form-section">
-        <label for="age">Age:</label>
-        <input type="number" id="age" placeholder="Enter your age">
-      </div>
-      <div class="form-section">
-        <label for="gender">Gender:</label>
-        <select id="gender">
-          <option value="">Select gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-          <option value="prefer-not-to-say">Prefer not to say</option>
-        </select>
-      </div>
-      <div class="form-section">
-        <label for="language">Native Language:</label>
-        <input type="text" id="language" placeholder="Enter your native language">
-      </div>
-      <div class="form-section">
-        <label for="hearing">Hearing Ability:</label>
-        <select id="hearing">
-          <option value="">Select hearing ability</option>
-          <option value="normal">Normal hearing</option>
-          <option value="corrected">Corrected with hearing aids</option>
-          <option value="impaired">Hearing impaired</option>
-        </select>
-      </div>
-    </div>
-    
-    <p id="progress"></p>
+  <div id="container">
+    <h2>Prosodic Irony Evaluation</h2>
+    <p id="progress"></p>
 
-    <audio id="audioPlayer" controls></audio>
+    <audio id="audioPlayer" controls></audio>
 
-    <!-- Embedded Google Form -->
-    <iframe id="formFrame"></iframe>
+    <!-- Embedded Google Form -->
+    <iframe id="formFrame"></iframe>
 
-    <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
-      <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
-        ✅ <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
-      </p>
-    </div>
+    <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
+    <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
+        <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
+    </p>
+</div>
 
-    <button id="nextBtn">Next Sample</button>
-  </div>
+    <button id="nextBtn">Next Sample</button>
+  </div>
 
-  <script>
-    /**********************
-     * CONFIGURATION AREA *
-     **********************/
+  <script>
+    /**********************
+     * CONFIGURATION AREA *
+     **********************/
 
-    // Define audio tags and number of files per tag
-    const tags = ['K1_', 'S4_', 'S14N_', 'S1H4_'];
-    const numFiles = 6;
+    // Define audio tags and number of files per tag
+    const tags = ['K1_', 'S4_', 'S14N_', 'S1H4_'];
+    const numFiles = 6;
 
-    const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSflygks3jJjGm4_J-CJVH1dqJpzMLb10rd8QpfsH63mWeaLNA/viewform?embedded=true&usp=pp_url";
-    const sampleFieldID = "entry.1636001789";
+    const formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSflygks3jJjGm4_J-CJVH1dqJpzMLb10rd8QpfsH63mWeaLNA/viewform?embedded=true&usp=pp_url";
+    const sampleFieldID = "entry.1636001789";
 
-    /**********************
-     * PAGE FUNCTIONALITY *
-     **********************/
+    /**********************
+     * PAGE FUNCTIONALITY *
+     **********************/
 
-    // Build list of all audio file paths - ONLY USE WORKING PATHS
-    let audioFiles = [];
-    tags.forEach(tag => {
-      for (let i = 1; i <= numFiles; i++) {
-        const idx = String(i).padStart(3, '0');
-        // Only use the paths that were confirmed to work
-        audioFiles.push(`audio/${tag}${idx}.wav`);
-      }
-    });
+    // Build list of all audio file paths - ONLY USE WORKING PATHS
+    let audioFiles = [];
+    tags.forEach(tag => {
+      for (let i = 1; i <= numFiles; i++) {
+        const idx = String(i).padStart(3, '0');
+        // Only use the paths that were confirmed to work
+        audioFiles.push(`audio/${tag}${idx}.wav`);
+      }
+    });
 
-    // Remove missing files based on your debug results
-    const missingFiles = [
-     // 'audio/S14N_011.wav',
-     // 'audio/S14N_013.wav'
-    ];
+    // Remove missing files based on your debug results
+    const missingFiles = [
+     // 'audio/S14N_011.wav',
+     // 'audio/S14N_013.wav'
+    ];
 
-    // Filter out missing files
-    //audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
+    // Filter out missing files
+    //audioFiles = audioFiles.filter(file => !missingFiles.includes(file));
 
-    // Randomize file order
-    audioFiles.sort(() => Math.random() - 0.5);
+    // Randomize file order
+    audioFiles.sort(() => Math.random() - 0.5);
 
-    let currentIndex = 0;
+    let currentIndex = 0;
 
-    const player = document.getElementById('audioPlayer');
-    const progress = document.getElementById('progress');
-    const formFrame = document.getElementById('formFrame');
-    const nextBtn = document.getElementById('nextBtn');
+    const player = document.getElementById('audioPlayer');
+    const progress = document.getElementById('progress');
+    const formFrame = document.getElementById('formFrame');
+    const nextBtn = document.getElementById('nextBtn');
+    const fileInfo = document.getElementById('fileInfo');
 
-    // Personal info form elements
-    const nameInput = document.getElementById('name');
-    const ageInput = document.getElementById('age');
-    const genderSelect = document.getElementById('gender');
-    const languageInput = document.getElementById('language');
-    const hearingSelect = document.getElementById('hearing');
+    function loadAudio() {
+      if (currentIndex >= audioFiles.length) {
+        document.getElementById('container').innerHTML = `
+          <h2>All samples evaluated </h2>
+          <p>Thank you for your participation!</p>
+          <p>You evaluated ${audioFiles.length} audio samples.</p>`;
+        return;
+      }
 
-    // Load personal info from localStorage if available
-    function loadPersonalInfo() {
-      const savedInfo = localStorage.getItem('prosodicIronyPersonalInfo');
-      if (savedInfo) {
-        const info = JSON.parse(savedInfo);
-        nameInput.value = info.name || '';
-        ageInput.value = info.age || '';
-        genderSelect.value = info.gender || '';
-        languageInput.value = info.language || '';
-        hearingSelect.value = info.hearing || '';
-      }
-    }
+      const file = audioFiles[currentIndex];
+      player.src = file;
+      player.load();
+      progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
+     // fileInfo.textContent = `Current file: ${file}`;
 
-    // Save personal info to localStorage
-    function savePersonalInfo() {
-      const info = {
-        name: nameInput.value,
-        age: ageInput.value,
-        gender: genderSelect.value,
-        language: languageInput.value,
-        hearing: hearingSelect.value
-      };
-      localStorage.setItem('prosodicIronyPersonalInfo', JSON.stringify(info));
-    }
+      // Prefill hidden field with encoded filename
+      const encodedFile = encodeURIComponent(file);
+      const formURL = `${formBaseURL}&${sampleFieldID}=${encodedFile}`;
+      formFrame.src = formURL;
+    }
 
-    // Add event listeners to save personal info when changed
-    nameInput.addEventListener('input', savePersonalInfo);
-    ageInput.addEventListener('input', savePersonalInfo);
-    genderSelect.addEventListener('change', savePersonalInfo);
-    languageInput.addEventListener('input', savePersonalInfo);
-    hearingSelect.addEventListener('change', savePersonalInfo);
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      loadAudio();
+    });
 
-    function loadAudio() {
-      if (currentIndex >= audioFiles.length) {
-        document.getElementById('container').innerHTML = `
-          <h2>All samples evaluated ✅</h2>
-          <p>Thank you for your participation!</p>
-          <p>You evaluated ${audioFiles.length} audio samples.</p>`;
-        return;
-      }
+    // Show initial file count
+    //fileInfo.textContent = `Total files available: ${audioFiles.length}`;
 
-      const file = audioFiles[currentIndex];
-      player.src = file;
-      player.load();
-      progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
-
-      // Prefill hidden field with encoded filename
-      const encodedFile = encodeURIComponent(file);
-      const formURL = `${formBaseURL}&${sampleFieldID}=${encodedFile}`;
-      formFrame.src = formURL;
-    }
-
-    nextBtn.addEventListener('click', () => {
-      currentIndex++;
-      loadAudio();
-    });
-
-    // Load personal info on page load
-    loadPersonalInfo();
-
-    // Initial load
-    loadAudio();
-  </script>
+    // Initial load
+    loadAudio();
+  </script>
 </body>
 </html>
+
+
+
