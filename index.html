@@ -52,12 +52,74 @@
       margin: 0.5em 0;
       font-size: 0.9em;
     }
+    .personal-info {
+      background: #e8f4fd;
+      padding: 1em;
+      border-radius: 8px;
+      margin: 1em 0;
+      text-align: left;
+    }
+    .personal-info h3 {
+      margin-top: 0;
+      color: #1e40af;
+    }
+    .personal-info label {
+      display: block;
+      margin: 0.5em 0 0.2em;
+    }
+    .personal-info input, .personal-info select {
+      width: 100%;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .form-section {
+      margin-bottom: 1.5em;
+    }
   </style>
 </head>
 
 <body>
   <div id="container">
     <h2>Prosodic Irony Evaluation</h2>
+    
+    <!-- Personal Information Form -->
+    <div class="personal-info">
+      <h3>Personal Information</h3>
+      <div class="form-section">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+      </div>
+      <div class="form-section">
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age">
+      </div>
+      <div class="form-section">
+        <label for="gender">Gender:</label>
+        <select id="gender">
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="form-section">
+        <label for="language">Native Language:</label>
+        <input type="text" id="language" placeholder="Enter your native language">
+      </div>
+      <div class="form-section">
+        <label for="hearing">Hearing Ability:</label>
+        <select id="hearing">
+          <option value="">Select hearing ability</option>
+          <option value="normal">Normal hearing</option>
+          <option value="corrected">Corrected with hearing aids</option>
+          <option value="impaired">Hearing impaired</option>
+        </select>
+      </div>
+    </div>
+    
     <p id="progress"></p>
 
     <audio id="audioPlayer" controls></audio>
@@ -66,10 +128,10 @@
     <iframe id="formFrame"></iframe>
 
     <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: center;">
-    <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
+      <p style="margin: 0; font-weight: bold; color: #155724; font-size: 16px;">
         ✅ <span style="color: #d63031; text-transform: uppercase; text-decoration: underline;">SUBMIT</span> your answers before proceeding to the next audio file
-    </p>
-</div>
+      </p>
+    </div>
 
     <button id="nextBtn">Next Sample</button>
   </div>
@@ -118,7 +180,45 @@
     const progress = document.getElementById('progress');
     const formFrame = document.getElementById('formFrame');
     const nextBtn = document.getElementById('nextBtn');
-    const fileInfo = document.getElementById('fileInfo');
+
+    // Personal info form elements
+    const nameInput = document.getElementById('name');
+    const ageInput = document.getElementById('age');
+    const genderSelect = document.getElementById('gender');
+    const languageInput = document.getElementById('language');
+    const hearingSelect = document.getElementById('hearing');
+
+    // Load personal info from localStorage if available
+    function loadPersonalInfo() {
+      const savedInfo = localStorage.getItem('prosodicIronyPersonalInfo');
+      if (savedInfo) {
+        const info = JSON.parse(savedInfo);
+        nameInput.value = info.name || '';
+        ageInput.value = info.age || '';
+        genderSelect.value = info.gender || '';
+        languageInput.value = info.language || '';
+        hearingSelect.value = info.hearing || '';
+      }
+    }
+
+    // Save personal info to localStorage
+    function savePersonalInfo() {
+      const info = {
+        name: nameInput.value,
+        age: ageInput.value,
+        gender: genderSelect.value,
+        language: languageInput.value,
+        hearing: hearingSelect.value
+      };
+      localStorage.setItem('prosodicIronyPersonalInfo', JSON.stringify(info));
+    }
+
+    // Add event listeners to save personal info when changed
+    nameInput.addEventListener('input', savePersonalInfo);
+    ageInput.addEventListener('input', savePersonalInfo);
+    genderSelect.addEventListener('change', savePersonalInfo);
+    languageInput.addEventListener('input', savePersonalInfo);
+    hearingSelect.addEventListener('change', savePersonalInfo);
 
     function loadAudio() {
       if (currentIndex >= audioFiles.length) {
@@ -133,7 +233,6 @@
       player.src = file;
       player.load();
       progress.textContent = `Sample ${currentIndex + 1} of ${audioFiles.length}`;
-     // fileInfo.textContent = `Current file: ${file}`;
 
       // Prefill hidden field with encoded filename
       const encodedFile = encodeURIComponent(file);
@@ -146,16 +245,11 @@
       loadAudio();
     });
 
-    // Show initial file count
-    //fileInfo.textContent = `Total files available: ${audioFiles.length}`;
+    // Load personal info on page load
+    loadPersonalInfo();
 
     // Initial load
     loadAudio();
   </script>
 </body>
 </html>
-
-
-
-
-
